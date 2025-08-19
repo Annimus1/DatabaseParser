@@ -1,0 +1,13 @@
+click==8.2.1
+markdown-it-py==4.0.0
+mdurl==0.1.2
+numpy==2.3.2
+pandas==2.3.1
+Pygments==2.19.2
+python-dateutil==2.9.0.post0
+pytz==2025.2
+rich==14.1.0
+rich-click==1.8.9
+six==1.17.0
+typing_extensions==4.14.1
+tzdata==2025.2
