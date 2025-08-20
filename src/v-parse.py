@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import os
 import rich_click as click
 from util import Util
 from model.Parser import Parser
@@ -30,15 +31,30 @@ def main(filename):
 
         # Show available actions
         click.echo("Available actions:")
-        click.echo("1) Fill up phones")
-        click.echo("2) Remove columns")
-        click.echo("3) Save")
+        click.echo("1) Show Headers")
+        click.echo("2) Fill up phones")
+        click.echo("3) Remove columns")
+        click.echo("4) Vicidialize")
+        click.echo("5) Save")
         click.echo("0) Exit")
 
         try:
             option = int(input("-> "))
 
             if option == 1:
+                # Show Headers
+                # Check if the operating system is Windows ('nt') or Unix-like ('posix')
+                if os.name == 'nt':
+                    _ = os.system('cls')  # For Windows
+                else:
+                    # For Linux/macOS/other Unix-like systems
+                    _ = os.system('clear')
+
+                Util.Show_headers(parser.get_filename(), parser.get_headers())
+
+                continue
+
+            elif option == 2:
                 # Fill up Phone columns
                 phone_column = int(input("Enter Phone Column > "))
                 alt_column = int(input("Enter Alternative Phone Column > "))
@@ -65,24 +81,29 @@ def main(filename):
                 parser.set_current_dataframe(result)
                 # Update headers
                 parser.set_current_headers()
+
                 input("Press Enter to continue")
+
                 continue
 
-            elif option == 2:
+            elif option == 3:
                 # Remove columns
                 prompt = "Enter columns you would like to keep (separated by commas): "
                 keep_columns = input(prompt)
-                keep_columns = keep_columns.split(
-                    ",")  # Convert string into list
+                keep_columns = [int(p.strip())
+                                for p in keep_columns.split(',')]
 
                 # Call parser method to remove unused columns
-                result = parser.RemoveUnusedColumns()
-                parser.set_current_dataframe(result)
-                # Update headers
-                parser.set_current_headers()
-                break
+                parser.RemoveUnusedColumns(keep_columns)
+                input("Press Enter to continue")
 
-            elif option == 3:
+                continue
+
+            elif option == 4:
+                # Vicidialize
+                continue
+
+            elif option == 5:
                 # Save the current DataFrame
                 parser.Save(Parser.get_filename())
                 break
