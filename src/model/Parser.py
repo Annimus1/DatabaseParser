@@ -85,17 +85,32 @@ class Parser(Serializable):
             filename = f"Cleaned_{self.filename}"
         print(f"{filename}.{extention}")
 
-    def RemoveUnusedColumns(self, columnsToRemove: List[int]) -> pd.DataFrame:
+    def RemoveUnusedColumns(self, columnsToKeep: List[int]):
         """
         Remove unused columns from the DataFrame.
 
         Args:
-            columnsToRemove (List[int]): List of column indices to remove.
-
-        Returns:
-            pd.DataFrame: DataFrame with specified columns removed.
+            columnsToKeep (List[int]): List of column indices to keep.
         """
-        pass
+
+        columns = []
+
+        try:
+            # Fill up columns headers
+            for i in columnsToKeep:
+                columns.append(self.original_headers[i])
+
+            # Create new df with selected columns
+            new_df = self.df[columns]
+
+            self.set_current_dataframe(new_df)
+            self.set_current_headers()
+            echo(style(text=f"Dataframe updated successfully -> Columns: {columns}",
+                       fg="green", bold=True))
+
+        except IndexError:
+            echo(style(text=f"Some columns doesn't match, please try again.",
+                       fg="red", bold=True))
 
     def Fillup_phones(self, phone_column: int, alt_column: int,
                       phones_columns: List[int],
