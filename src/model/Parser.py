@@ -1,5 +1,5 @@
 import pandas as pd
-from os import path
+from os import path, getcwd, path
 from rich_click import echo, style
 from typing import List
 from model.Serializable import Serializable
@@ -71,8 +71,7 @@ class Parser(Serializable):
         """
         self.original_headers = self.df.columns.values
 
-    def Save(self, data: pd.DataFrame, filename: str = '',
-             extention: str = "csv") -> None:
+    def Save(self) -> None:
         """
         Save the DataFrame to a file.
 
@@ -81,9 +80,19 @@ class Parser(Serializable):
             filename (str, optional): Filename to save as. Defaults to 'Cleaned_{filename}'.
             extention (str, optional): File extension. Defaults to 'csv'.
         """
-        if not filename:
-            filename = f"Cleaned_{self.filename}"
-        print(f"{filename}.{extention}")
+
+        filename = f"Cleaned_{self.filename}"
+
+        output = path.join(getcwd(), filename)
+
+        try:
+            self.df.to_csv(output, index=False)
+            echo(style(text=f"File saved successfully: {
+                 output}", bold=True, fg="green"))
+
+        except IOError:
+            echo(style(
+                text=f"There was a problem\nThe file could not be processed", bold=True, fg="red"))
 
     def RemoveUnusedColumns(self, columnsToKeep: List[int]):
         """

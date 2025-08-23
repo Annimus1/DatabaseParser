@@ -13,8 +13,7 @@ class Serializable(ABC):
     """
 
     @abstractmethod
-    def Save(self, data: DataFrame, filename: str,
-             extention: str = "csv") -> None:
+    def Save(self) -> None:
         """
         Saves the object's data to a file.
 

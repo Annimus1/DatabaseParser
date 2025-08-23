@@ -105,7 +105,7 @@ def main(filename):
 
             elif option == 5:
                 # Save the current DataFrame
-                parser.Save(Parser.get_filename())
+                parser.Save()
                 break
 
             elif option == 0:
