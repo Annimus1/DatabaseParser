@@ -1,3 +1,4 @@
+# Author: Pablo Vergara
 #!/usr/bin/python3
 import os
 import rich_click as click
@@ -9,7 +10,10 @@ from model.Parser import Parser
 @click.argument('filename', required=True, type=click.Path(exists=True))
 def main(filename):
     """
-    Main entry point for the database parser CLI.
+    Main entry point for the V-Parse CLI tool.
+
+    This tool helps you validate, clean, and format CSV files for Vicidial database import.
+    You can inspect headers, organize phone columns, remove unnecessary columns, and save the processed file.
 
     Args:
         filename (str): Path to the CSV file to process.
@@ -43,15 +47,13 @@ def main(filename):
 
             if option == 1:
                 # Show Headers
-                # Check if the operating system is Windows ('nt') or Unix-like ('posix')
+                # Clear the terminal screen based on OS
                 if os.name == 'nt':
                     _ = os.system('cls')  # For Windows
                 else:
-                    # For Linux/macOS/other Unix-like systems
-                    _ = os.system('clear')
+                    _ = os.system('clear')  # For Linux/macOS
 
                 Util.Show_headers(parser.get_filename(), parser.get_headers())
-
                 continue
 
             elif option == 2:
@@ -83,7 +85,6 @@ def main(filename):
                 parser.set_current_headers()
 
                 input("Press Enter to continue")
-
                 continue
 
             elif option == 3:
@@ -96,11 +97,17 @@ def main(filename):
                 # Call parser method to remove unused columns
                 parser.RemoveUnusedColumns(keep_columns)
                 input("Press Enter to continue")
-
                 continue
 
             elif option == 4:
                 # Vicidialize
+                prompt = "Enter column from current Phone: "
+                phone = int(input(prompt))
+
+                prompt = "Enter column from current Alt Phone: "
+                alt = int(input(prompt))
+
+                parser.Vicidialize(phone, alt)
                 continue
 
             elif option == 5:
