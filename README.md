@@ -45,4 +45,8 @@ pip install -r requirements.txt
 python src/v-parse.py path/to/yourfile.csv
 ```
 
-You will be presented with a menu to inspect headers, fill phone columns, remove columns, and
+You will be presented with a menu to inspect headers, fill phone columns, remove columns, filter data, vicidialize, and save your processed file.
+
+## Author
+
+**Pablo Vergara**
