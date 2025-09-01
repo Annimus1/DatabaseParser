@@ -10,6 +10,14 @@ class Parser(Serializable):
     """
     Parser class for handling CSV files and performing data cleaning operations.
 
+    This class provides methods to:
+    - Load and manage CSV data.
+    - Clean and format phone numbers for Vicidial.
+    - Remove or keep specific columns.
+    - Fill missing phone numbers from alternative columns.
+    - Filter rows by column values.
+    - Save the processed data to a new CSV file.
+
     Attributes:
         fullPath (str): Absolute path to the file.
         filename (str): Name of the file.
@@ -177,7 +185,7 @@ class Parser(Serializable):
 
         return result
 
-    def Filter_by(self, column_values: List[str]) -> None:
+    def Filter_by(self, targetColumn: int, column_values: List[str]) -> None:
         """
         Filter the DataFrame by specified column values.
 
@@ -186,7 +194,33 @@ class Parser(Serializable):
 
         (Not implemented yet)
         """
-        pass
+        total_values_found = 0
+        results = []
+
+        for _, row in self.df.iterrows():
+            
+            current_colum_value = str(row[self.original_headers[targetColumn]]).lower() 
+            print(current_colum_value)
+
+            for value in column_values:   
+                if current_colum_value == value.lower():
+                    print(current_colum_value)
+                    total_values_found += 1
+                    results.append(row)
+        
+        dataframe = pd.DataFrame(results, columns=self.get_headers())
+
+        if(total_values_found > 0 ):
+            echo(style(text=f"{total_values_found} items found.", fg="green", bold=True))
+            chose = input("Would you like to set it as current Data? [y/N]: ")
+            if(chose == 'y' or chose == 'Y'):
+                self.set_current_dataframe(dataframe)
+            return
+        
+        echo(style(text=f"No items found.", fg="red", bold=True))
+
+
+        
 
     def Vicidialize(self, phoneColumn: int, altPhoneColumn: int) -> None:
         """
@@ -237,5 +271,4 @@ class Parser(Serializable):
                     result = result[1:]
 
         return result
-
-    # TODO: Auto Split
+    

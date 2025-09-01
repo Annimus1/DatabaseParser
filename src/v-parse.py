@@ -35,12 +35,13 @@ def main(filename):
 
         # Show available actions
         click.echo("Available actions:")
-        click.echo("1) Show Headers")
-        click.echo("2) Fill up phones")
-        click.echo("3) Remove columns")
-        click.echo("4) Vicidialize")
-        click.echo("5) Save")
-        click.echo("0) Exit")
+        click.echo(click.style(text="1) ", fg="green") + "Show Headers")
+        click.echo(click.style(text="2) ", fg="yellow") + "Fill up phones")
+        click.echo(click.style(text="3) ", fg="red") + "Remove columns")
+        click.echo(click.style(text="4) ", fg="blue") + "Vicidialize")
+        click.echo(click.style(text="5) ", fg="red") + "Filter")
+        click.echo(click.style(text="6) ", fg="cyan") + "Save")
+        click.echo(click.style(text="0) ", fg="white") + "Exit")
 
         try:
             option = int(input("-> "))
@@ -111,6 +112,22 @@ def main(filename):
                 continue
 
             elif option == 5:
+                # Filter
+                prompt = "Enter Target column: "
+                target = int(input(prompt))
+
+                prompt = "Enter values to filter separated by commas: "
+                values = input(prompt)
+                values = values.split(',')
+
+                if len(values) == 1 and values[0] == '':
+                    click.echo(click.style(text='Amount of values can not be 0 ',bg='red', bold=True))
+                
+                parser.Filter_by(target, values)
+
+                continue
+
+            elif option == 6:
                 # Save the current DataFrame
                 parser.Save()
                 break
